@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.js"></script>
+    <script>
+        var data = {
+            add: {
+                "name": "测试奖品",
+                "totalMoney": 20000,
+                "maxMoney": 300,
+                "minMoney": 110,
+                "chance": 20.6,
+                "createUser": "admin",
+                "updateUser": ""
+            },
+            update: {
+                "name": "测试奖品" + Math.random(),
+                updateUser: 'random'
+            }
+        };
+        function add() {
+            $.ajax({
+                type: "POST",
+                url: "/egg/prizes",
+                data: JSON.stringify(data.add),
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function(msg){
+                    $("#result").append('add:' + JSON.stringify(msg));
+                }
+            });
+        }
+        function del(){
+            $.ajax({
+                type: "DELETE",
+                url: "/egg/prizes/"+$('#id').val(),
+                dataType: "json",
+                success: function(msg){
+                    $("#result").append('DELETE:' + JSON.stringify(msg));
+                }
+            });
+        }
+        function update(){
+            $.ajax({
+                type: "PUT",
+                url: "/egg/prizes/"+$('#id').val(),
+                data: JSON.stringify(data.update),
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function(msg){
+                    $("#result").append('UPDATE:' + JSON.stringify(msg));
+                }
+            });
+
+        }
+        function get(){
+            $.ajax({
+                type: "GET",
+                url: "/egg/prizes/"+$('#id').val(),
+                dataType: "json",
+                success: function(msg){
+                    $("#result").append('GET:' + JSON.stringify(msg));
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+id:<input id="id" />
+<button onclick="add()">add</button>
+<button onclick="del()">delete</button>
+<button onclick="update()">update</button>
+<button onclick="get()">get</button>
+<h2>文件上传示例</h2>
+<hr/>
+<form method="POST" enctype="multipart/form-data" action="/egg/pictures">
+    <p>
+        文件：<input type="file" name="file" />
+    </p>
+    <p>
+        名称：<input type="text" name="name" />
+    </p>
+    <p>
+        <input type="submit" value="上传" />
+    </p>
+</form>
+
+<p id="result">result:</p>
+</body>
+</html>
