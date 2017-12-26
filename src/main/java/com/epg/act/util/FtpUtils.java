@@ -32,7 +32,7 @@ public class FtpUtils {
             String username = resourceBundle.getString(instance + ".username");
             String password = resourceBundle.getString(instance + ".password");
             int port = resourceBundle.containsKey(instance + ".port") ? Integer.valueOf(resourceBundle.getString(instance + ".port")) : 21;
-            FTPClient ftpClient = new FTPClient();
+            @Cleanup("disconnect") FTPClient ftpClient = new FTPClient();
             ftpClient.connect(url, StringUtils.isEmpty(port) ? 21 : port);
             ftpClient.login(username, password);
             ftpClient.enterLocalPassiveMode();
@@ -54,7 +54,7 @@ public class FtpUtils {
      * @throws IOException e
      */
     public static boolean upload(FtpUtils.Instance ftp, String directory, InputStream inputStream, String destName) throws IOException {
-        @Cleanup("disconnect") FTPClient ftpClient = ftp.getFTP();
+        FTPClient ftpClient = ftp.getFTP();
         try {
             if (!ftpClient.changeWorkingDirectory(directory)) {
                 makeDirectory(ftpClient, directory);
@@ -139,14 +139,14 @@ public class FtpUtils {
     }
 
     /**
-     * @param directory    要创建的目录所在ftp的路径名不包含ftp地址
+     * @param directory 要创建的目录所在ftp的路径名不包含ftp地址
      * @return Boolean
      * @throws IOException e
      */
     private static boolean makeDirectory(FTPClient ftpClient, String directory) throws IOException {
         boolean flag = false;
         if (!StringUtils.isEmpty(directory)) {
-            StringTokenizer tokenizer = new StringTokenizer(directory,"/");
+            StringTokenizer tokenizer = new StringTokenizer(directory, "/");
             StringBuilder pathName = new StringBuilder();
             while (tokenizer.hasMoreTokens()) {
                 pathName.append("/").append(tokenizer.nextToken());

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epg.act.mapper.PicMapper">
+
+    <select id="pageData" resultType="com.epg.act.entity.Picture">
+        SELECT * FROM PICTURE P
+        <where>
+            <if test="name != null">
+                AND P.NAME LIKE CONCAT('%','${name}','%')
+            </if>
+        </where>
+        ORDER BY P.CREATE_TIME DESC
+        LIMIT ${current},${size};
+    </select>
+    <select id="pageCount" resultType="java.lang.Integer">
+        SELECT count(ID) FROM PICTURE P
+        <where>
+            <if test="name != null">
+                AND P.NAME LIKE CONCAT('%','${name}','%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

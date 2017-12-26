@@ -1,19 +1,20 @@
 package com.epg.act.service;
 
 import com.epg.act.entity.Picture;
-import com.epg.act.web.requestVo.PicRequestVo;
-import org.springframework.data.domain.Page;
+import com.epg.act.util.Pager;
+import com.epg.act.web.exception.CheckException;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface PicService {
 
-    Picture getPicture(Integer id);
+    Picture get(Long id);
 
-    Page<Picture> pagePicture(int page, int perPage, String sortBy, String order);
+    Pager<Picture> page(int current, int size, String name);
 
-    Picture createPicture(Picture picture);
+    void create(MultipartFile file, String createUser) throws CheckException, IOException;
 
-    Picture updatePicture(Integer id, PicRequestVo requestVo);
-
-    boolean deletePicture(Integer id);
+    void delete(Long id);
 
 }

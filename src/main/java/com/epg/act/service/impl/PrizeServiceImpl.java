@@ -1,63 +1,57 @@
 package com.epg.act.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.epg.act.entity.EggPrize;
-import com.epg.act.repository.PrizeRepository;
+import com.epg.act.mapper.PrizeMapper;
 import com.epg.act.service.PrizeService;
-import com.epg.act.web.requestVo.PrizeRequestVo;
+import com.epg.act.util.Pager;
+import com.epg.act.web.exception.CheckException;
+import com.epg.act.web.requestVo.PrizeCreate;
+import com.epg.act.web.requestVo.PrizeUpdate;
+import com.epg.act.web.responseVo.ResultCode;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
 @Service
-public class PrizeServiceImpl implements PrizeService{
+public class PrizeServiceImpl extends ServiceImpl<PrizeMapper, EggPrize> implements PrizeService {
 
     @Resource
-    private PrizeRepository prizeRepository;
+    private PrizeMapper prizeMapper;
 
     @Override
     public EggPrize getPrize(Integer id) {
-        return prizeRepository.findOne(id);
+        return prizeMapper.selectById(id);
     }
 
     @Override
-    public Page<EggPrize> pagePrize(int page, int perPage, String sortBy, String order) {
-        Pageable pageable = StringUtils.isEmpty(sortBy) ? new PageRequest(page, perPage) : new PageRequest(page, perPage, new Sort(Sort.Direction.ASC, sortBy));
-        return prizeRepository.findAll(pageable);
+    public Pager<EggPrize> page(int current, int size, String name, Integer status) {
+        Pager<EggPrize> pager = new Pager<>(current, size);
+        pager.setRecords(prizeMapper.pageData(current, size, name, status));
+        pager.setCount(prizeMapper.pageCount(name, status));
+        return pager;
     }
 
     @Override
-    public EggPrize createPrize(PrizeRequestVo requestVo) {
+    public void create(PrizeCreate requestVo) {
         EggPrize prize = new EggPrize();
         BeanUtils.copyProperties(requestVo, prize);
         prize.setUpdateUser(prize.getCreateUser());
-        return prizeRepository.save(prize);
+        if (prizeMapper.insert(prize) != 1) throw new CheckException(ResultCode.UNKNOW_DATA);
     }
 
     @Override
-    public EggPrize updatePrize(Integer id, PrizeRequestVo requestVo) {
-        EggPrize prize = prizeRepository.findOne(id);
-        if (prize == null) {
-            return null;
-        }
+    public void update(Integer id, PrizeUpdate requestVo) {
+        EggPrize prize = new EggPrize();
         com.epg.act.web.util.BeanUtils.copyProperties(requestVo, prize, true);
-        return prizeRepository.save(prize);
+        prize.setId(id);
+        if (prizeMapper.updateById(prize) != 1) throw new CheckException(ResultCode.UNKNOW_DATA);
     }
 
     @Override
-    public boolean deletePrize(Integer id) {
-        try {
-            prizeRepository.delete(id);
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
-        }
+    public void delete(Integer id) {
+        if (prizeMapper.deleteById(id) != 1) throw new CheckException(ResultCode.UNKNOW_DATA);
     }
 
 }

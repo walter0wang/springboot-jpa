@@ -1,5 +1,6 @@
 package com.epg.act.web.controller;
 
+import com.epg.act.web.exception.CheckException;
 import com.epg.act.web.responseVo.ResultBean;
 import com.epg.act.web.responseVo.ResultCode;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +23,9 @@ import java.util.Map;
 
 @ControllerAdvice
 @Slf4j
-public class ExceptionHandle {
+public class ExceptionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandle.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
     /*@ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -44,19 +45,18 @@ public class ExceptionHandle {
     }*/
 
 
-
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnexpectedTypeException.class)
-    public ResultBean unexpectedType(UnexpectedTypeException exception){
-        log.error("UnexpectedTypeException", exception);
+    public ResultBean unexpectedType(UnexpectedTypeException exception) {
+        log.error("UnexpectedTypeException", exception.getMessage());
         return new ResultBean<>(ResultCode.MULTI_CHECK, exception.getMessage());
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResultBean messageNotReadable(HttpMessageNotReadableException exception){
+    public ResultBean messageNotReadable(HttpMessageNotReadableException exception) {
         log.error("error json type", exception);
         return new ResultBean<>(ResultCode.ERROR_JSON, exception.getMessage());
     }
@@ -65,9 +65,17 @@ public class ExceptionHandle {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public ResultBean<?> ex(MethodArgumentNotValidException exception) {
-        log.error("params not valid", exception);
+        log.error("MethodArgumentNotValidException params not valid", exception.getMessage());
         BindingResult bindingResult = exception.getBindingResult();
         return new ResultBean<>(ResultCode.CHECK_ERROR, getErrors(bindingResult));
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(CheckException.class)
+    public ResultBean<?> checkException(CheckException exception) {
+        log.error("CheckException params not valid", exception.getMessage());
+        return new ResultBean<>(exception.getCode());
     }
 
     private Map<String, String> getErrors(BindingResult result) {

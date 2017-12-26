@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
     public static void copyProperties(Object source, Object target, boolean ignoreNull) {
-        copyProperties(source, target, ignoreNull, (Class)null, (String[]) null);
+        copyProperties(source, target, ignoreNull, (Class) null, (String[]) null);
     }
 
     private static void copyProperties(Object source, Object target, boolean ignoreNull, Class<?> editable, String... ignoreProperties) throws BeansException {

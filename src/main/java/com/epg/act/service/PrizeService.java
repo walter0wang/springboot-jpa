@@ -1,19 +1,20 @@
 package com.epg.act.service;
 
 import com.epg.act.entity.EggPrize;
-import com.epg.act.web.requestVo.PrizeRequestVo;
-import org.springframework.data.domain.Page;
+import com.epg.act.util.Pager;
+import com.epg.act.web.requestVo.PrizeCreate;
+import com.epg.act.web.requestVo.PrizeUpdate;
 
 public interface PrizeService {
 
     EggPrize getPrize(Integer id);
 
-    Page<EggPrize> pagePrize(int page,int perPage, String sortBy, String order);
+    Pager<EggPrize> page(int current, int size, String name, Integer status);
 
-    EggPrize createPrize(PrizeRequestVo requestVo);
+    void create(PrizeCreate requestVo);
 
-    EggPrize updatePrize(Integer id, PrizeRequestVo requestVo);
+    void update(Integer id, PrizeUpdate requestVo);
 
-    boolean deletePrize(Integer id);
+    void delete(Integer id);
 
 }

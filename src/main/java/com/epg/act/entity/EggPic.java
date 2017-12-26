@@ -1,28 +1,18 @@
 package com.epg.act.entity;
 
-import javax.persistence.*;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 /**
- * @author WANGTAO WangTao
- * @create 2017/11/30 15:20
+ * @author WangTao
+ * @since create 2017/11/30 15:20
  */
-@Entity
-@Table(name = "EGG_PIC", schema = "egg", catalog = "")
+@Data
 public class EggPic {
     @Id
-    @Column(name = "ID")
-    @GeneratedValue
     private Long id;
-    @Basic
-    @Column(name = "PIC_TPL_ID")
     private Integer picTplId;
-    @Basic
-    @Column(name = "TYPE")
-    private Byte type;
-    @Basic
-    @Column(name = "UPLOAD_NAME")
+    private Integer type;
     private String uploadName;
-    @Basic
-    @Column(name = "NAME")
     private String name;
 }

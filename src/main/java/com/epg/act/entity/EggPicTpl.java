@@ -1,47 +1,38 @@
 package com.epg.act.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
  * @author WANGTAO WangTao
  * @since 2017/11/30 15:20
  */
-@Entity
-@Table(name = "EGG_PIC_TPL", schema = "egg", catalog = "")
 @Data
 @EqualsAndHashCode
 public class EggPicTpl {
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue
     private Integer id;
-    @Basic
-    @Column(name = "NAME")
+    @NotNull(message = "名称不可为空")
     private String name;
-    @Basic
-    @Column(name = "TYPE")
-    private Byte type;
-    @Basic
-    @Column(name = "NUM")
+    @ApiModelProperty(example = "1", notes = "模板类型 （1:标清 2:高清）")
+    @NotNull(message = "必填")
+    private Integer type;
     private Integer num;
-    @Basic
-    @Column(name = "CREATE_TIME", insertable = false)
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:SS")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createTime;
-    @Basic
-    @Column(name = "CREATE_USER")
     private String createUser;
-    @Basic
-    @Column(name = "UPDATE_TIME", updatable = false)
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:SS")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updateTime;
-    @Basic
-    @Column(name = "UPDATE_USER")
     private String updateUser;
+
+    @TableField(exist = false)
+    private String activName;
+    @TableField(exist = false)
+    private String activStatus;
 
 }

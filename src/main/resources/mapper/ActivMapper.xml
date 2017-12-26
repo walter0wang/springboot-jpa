@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epg.act.mapper.ActivityMapper">
+
+    <select id="pageData" resultType="com.epg.act.entity.EggActiv">
+        SELECT * FROM EGG_ACTIV EA
+        <where>
+            <if test="status != null">
+                AND EA.`STATUS` = #{status}
+            </if>
+            <if test="name != null">
+                AND EA.NAME LIKE CONCAT('%','${name}','%')
+            </if>
+        </where>
+        LIMIT ${current},${size};
+    </select>
+    <select id="pageCount" resultType="java.lang.Long">
+        SELECT count(ID) FROM EGG_ACTIV EA
+        <where>
+            <if test="status != null">
+                AND EA.`STATUS` = #{status}
+            </if>
+            <if test="name != null">
+                AND EA.NAME LIKE CONCAT('%','${name}','%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epg.act.mapper.PrizeMapper">
+
+    <select id="pageData" resultType="com.epg.act.entity.EggPrize">
+        SELECT * FROM (SELECT EP.*,EA.`NAME` AS activName,EA.`STATUS` AS activStatus from EGG_PRIZE EP
+        LEFT JOIN EGG_ACTIV EA ON EP.ID = EA.PRIZE_TPL_ID
+        WHERE 1=1
+        <if test="status != null">
+            AND EA.`STATUS` = #{status}
+        </if>
+        <if test="name != null">
+            AND EP.NAME LIKE CONCAT('%','${name}','%')
+        </if>
+        ORDER BY EA.`STATUS` DESC) A GROUP BY A.ID
+        LIMIT ${current},${size};
+    </select>
+    <select id="pageCount" resultType="java.lang.Integer">
+        SELECT count(A.ID) FROM
+        (SELECT DISTINCT(EP.ID) from EGG_PRIZE EP LEFT JOIN EGG_ACTIV EA ON EP.ID = EA.PRIZE_TPL_ID
+        WHERE 1=1
+        <if test="status != null">
+            AND EA.`STATUS` = #{status}
+        </if>
+        <if test="name != null">
+            AND EP.NAME LIKE CONCAT('%','${name}','%')
+        </if>
+        ) A
+    </select>
+</mapper>

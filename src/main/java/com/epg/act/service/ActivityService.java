@@ -1,19 +1,20 @@
 package com.epg.act.service;
 
 import com.epg.act.entity.EggActiv;
-import com.epg.act.web.requestVo.ActivityRequestVo;
-import org.springframework.data.domain.Page;
+import com.epg.act.util.Pager;
+import com.epg.act.web.requestVo.ActivCreate;
+import com.epg.act.web.requestVo.ActivUpdate;
 
 public interface ActivityService {
 
     EggActiv getActivity(Integer id);
 
-    Page<EggActiv> pageActivity(int page, int perPage, String sortBy, String order);
+    Pager<EggActiv> page(int current, int size, String name, Integer status);
 
-    EggActiv createActivity(ActivityRequestVo requestVo);
+    void createActivity(ActivCreate requestVo);
 
-    EggActiv updateActivity(Integer id, ActivityRequestVo requestVo);
+    void updateActivity(Integer id, ActivUpdate requestVo);
 
-    boolean deleteActivity(Integer id);
+    void deleteActivity(Integer id);
 
 }

@@ -2,21 +2,20 @@ package com.epg.act.web.exception;
 
 import com.epg.act.web.responseVo.ResultCode;
 
-public class CheckException extends RuntimeException{
+public class CheckException extends RuntimeException {
 
-    private Integer code;
+    private ResultCode code;
 
     public CheckException(ResultCode resultCode) {
         super(resultCode.getMsg());
-        this.code = resultCode.getCode();
+        this.code = resultCode;
     }
 
-    public Integer getCode() {
+    public ResultCode getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(ResultCode code) {
         this.code = code;
     }
-
 }

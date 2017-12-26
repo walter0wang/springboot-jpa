@@ -1,74 +1,61 @@
 package com.epg.act.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
  * @author WANGTAO WangTao
- * @since  2017/11/30 15:20
+ * @since 2017/11/30 15:20
  */
-@Entity
-@Table(name = "EGG_ACTIV", schema = "egg", catalog = "")
 @Data
 @EqualsAndHashCode
 public class EggActiv {
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue
     private Integer id;
-    @Basic
-    @Column(name = "NAME")
+    @NotNull(message = "活动名称不可为空")
     private String name;
-    @Basic
-    @Column(name = "PIC_TPL_ID")
+    @NotNull(message = "图片模板不可为空")
     private Integer picTplId;
-    @Basic
-    @Column(name = "PRIZE_TPL_ID")
+    @NotNull(message = "奖品不可为空")
     private Integer prizeTplId;
-    @Basic
-    @Column(name = "STATUS")
-    private Byte status;
-    @Basic
-    @Column(name = "START_DATE")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:SS")
+    private Integer status;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(dataType = "java.util.Date", example="2017-12-12")
     private Timestamp startDate;
-    @Basic
-    @Column(name = "END_DATE")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd 23:59:59")
+    @ApiModelProperty(dataType = "java.util.Date", example="2017-12-30")
     private Timestamp endDate;
-    @Basic
-    @Column(name = "WEEKS")
     private String weeks;
-    @Basic
-    @Column(name = "START_TIME")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd 00:00:00")
+    @ApiModelProperty(dataType = "java.util.Date", example="20:12:30")
     private Time startTime;
-    @Basic
-    @Column(name = "END_TIME")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd 23:59:59")
+    @ApiModelProperty(dataType = "java.util.Date", example="22:12:30")
     private Time endTime;
-    @Basic
-    @Column(name = "TIME_NUM")
-    private Byte timeNum;
-    @Basic
-    @Column(name = "TIME_BETWEEN")
-    private Byte timeBetween;
-    @Basic
-    @Column(name = "CREATE_TIME", insertable = false)
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:SS")
+    @NotNull(message = "时点个数不可为空")
+    @ApiModelProperty(value = "时间点个数")
+    private Integer timeNum;
+    @ApiModelProperty(value = "时间点最小间隔 单位：分")
+    private Integer timeBetween;
+    @ApiModelProperty(dataType = "java.util.Date", example="2017-12-25 16:11:25")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createTime;
-    @Basic
-    @Column(name = "CREATE_USER")
+    @ApiModelProperty(required = true)
     private String createUser;
-    @Basic
-    @Column(name = "UPDATE_TIME", updatable = false, insertable = false)
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:SS")
+    @ApiModelProperty(dataType = "java.util.Date", example="2017-12-25 16:11:25")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updateTime;
-    @Basic
-    @Column(name = "UPDATE_USER")
+
+    @ApiModelProperty(required = true)
     private String updateUser;
 
+
+    @TableField(exist = false)
+    private Short[] channels;
 }
